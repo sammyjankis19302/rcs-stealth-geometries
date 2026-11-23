@@ -1,0 +1,83 @@
+RCS COMPARATIVE ANALYSIS — RUN INSTRUCTIONS
+=============================================
+
+CONTENTS
+--------
+geometries.py            -- builds all 6 test geometries (sphere, flat plate,
+                             conventional aircraft, stealth aircraft, flying
+                             wing, chined-nose aircraft)
+solvers.py                -- the physics engine: Physical Optics (PO),
+                             Physical Theory of Diffraction (PTD), Double
+                             Bounce corner-reflector model, Mie series
+                             validation, and two RAM material models
+main.py    -- runs the full analysis and generates all
+                             figures as individual PNG images
+README.md                 -- full physics, math derivations, and results
+                             write-up (open in any Markdown viewer, or
+                             VS Code, or convert to PDF)
+output_ppt/                -- PRE-GENERATED images (64 PNGs), already done
+                             for you, organised into 8 folders. You can use
+                             these immediately for your PPT without running
+                             anything.
+
+
+QUICK START (just want the pictures — already done)
+------------------------------------------------------
+Nothing to run. Open the output_ppt/ folder. All 64 images are already
+generated and sorted into subfolders by category (geometry views, RCS
+polar plots, heatmaps, frequency sweeps, RAM material plots, mechanism
+breakdowns, comparison charts, physics diagrams).
+
+
+TO RE-RUN THE ANALYSIS YOURSELF (e.g. to show your professor it's live)
+--------------------------------------------------------------------------
+1. Make sure Python 3.10+ is installed.
+
+2. Install the required libraries:
+
+       pip install numpy scipy matplotlib
+
+   (If you're inside a virtual environment, drop the --break-system-packages
+   flag — just plain "pip install numpy scipy matplotlib" works.)
+
+3. From inside this folder, run:
+
+       python3 main.py
+
+4. It will take roughly 1-3 minutes. It prints progress as it goes and
+   regenerates everything fresh into ./output_ppt/.
+
+
+TROUBLESHOOTING
+----------------
+"ModuleNotFoundError: No module named 'numpy'" (or scipy/matplotlib)
+    -> run: pip install numpy scipy matplotlib
+
+"PermissionError" on a path starting with /mnt/...
+    -> this means an old/incorrect path got into the script. The version
+       in THIS zip already uses a local relative path (./output_ppt) and
+       should not show this error. If it does, check line ~67 of
+       main.py and make sure it reads:
+            BASE = './output_ppt'
+
+Script runs but no images appear
+    -> check you're looking inside the output_ppt/ folder that gets
+       created in the SAME directory you ran the script from.
+
+
+USING IN PYTHON DIRECTLY (for your own experiments / viva questions)
+------------------------------------------------------------------------
+    from geometries import conventional_aircraft, stealth_aircraft
+    from solvers import DoubleBounce, SalisburyScreen
+
+    V, F = stealth_aircraft()
+    solver = DoubleBounce(V, F, frequency_hz=10e9,
+                           ram_model=SalisburyScreen(10e9))
+
+    rcs = solver.monostatic_rcs_dbsm(az_deg=0, el_deg=0)
+    breakdown = solver.rcs_breakdown(az_deg=45)     # per-mechanism dB
+    angles, rcs_sweep = solver.azimuth_sweep(n=360) # full 360-deg sweep
+
+See README.md Section 13 ("How to Run") for more examples, and Sections
+3-10 for the complete physics and math derivation behind every number
+this code produces.
