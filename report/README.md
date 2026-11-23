@@ -47,4 +47,9 @@ and [`rcs/validate.py`](../rcs/validate.py) reproduces the checks.
 6. **The edge-diffraction term** adds an amplitude in m<sup>1.5</sup> to the facets' m², so its weight
    against Physical Optics depends on the units and the frequency.
 
-7. The June draft says "Semester VIII". It was the 6th semester.
+7. **The stealth aircraft's wings** are described as 65° swept delta wings (slides) and as swept back
+   (the code's comments), but as built they sweep forward by about 45°: the wing tips sit ahead of the
+   roots. The top view in [`figures/explained/three-views.png`](../figures/explained/three-views.png)
+   shows it. We left the shape as it was.
+
+8. The June draft says "Semester VIII". It was the 6th semester.
